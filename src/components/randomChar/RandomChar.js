@@ -28,9 +28,18 @@ class RandomChar extends Component {
     };
 
     render() {
-        const {
+        let {
             char: { name, description, thumbnail, homepage, wiki },
         } = this.state;
+
+        //description check
+        if (description === "") {
+            description = "There is no description for this character.";
+        }
+        if (description && description.length > 221) {
+            description = `${description.substr(0, [218])}...`;
+        }
+
         return (
             <div className="randomchar">
                 <div className="randomchar__block">
@@ -56,7 +65,9 @@ class RandomChar extends Component {
                     </p>
                     <p className="randomchar__title">Or choose another one</p>
                     <button className="button button__main">
-                        <div className="inner">try it</div>
+                        <div className="inner" onClick={this.updateChar}>
+                            try it
+                        </div>
                     </button>
                     <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
                 </div>
