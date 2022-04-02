@@ -28,17 +28,9 @@ class RandomChar extends Component {
     };
 
     render() {
-        let {
+        const {
             char: { name, description, thumbnail, homepage, wiki },
         } = this.state;
-
-        //description check
-        if (description === "") {
-            description = "There is no description for this character.";
-        }
-        if (description && description.length > 221) {
-            description = `${description.substr(0, [218])}...`;
-        }
 
         return (
             <div className="randomchar">
