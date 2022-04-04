@@ -13,6 +13,7 @@ class MarvelService {
         return await res.json();
     };
 
+    //takes 9 characters (limit=9)
     getAllCharacters = async () => {
         const res = await this.getResource(`${this._apiBase}characters?limit=9&offset=210&${this._apiKey}`);
 
@@ -28,6 +29,7 @@ class MarvelService {
     //transform the original object into the one that intresting us
     _transformCharacter = (char) => {
         return {
+            id: char.id,
             name: char.name,
             description: char.description
                 ? `${char.description.slice(0, 210)}...`
