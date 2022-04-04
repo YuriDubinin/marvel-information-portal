@@ -9,11 +9,6 @@ import mjolnir from "../../resources/img/mjolnir.png";
 import "./randomChar.scss";
 
 class RandomChar extends Component {
-    constructor(props) {
-        super(props);
-        this.updateChar();
-    }
-
     state = {
         char: {},
         loading: true,
@@ -22,6 +17,14 @@ class RandomChar extends Component {
 
     marvelService = new MarvelService();
 
+    //lyfecycle hooks
+    componentDidMount() {
+        this.updateChar();
+    }
+
+    componentWillUnmount() {}
+
+    //methods
     onCharLoaded = (char) => {
         this.setState({ char, loading: false });
     };
