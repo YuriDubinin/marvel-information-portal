@@ -4,6 +4,7 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spiner";
 import MarvelService from "../../services/MarvelService";
 
+import goblin from "../../resources/img/goblin.png";
 import mjolnir from "../../resources/img/mjolnir.png";
 
 import "./randomChar.scss";
@@ -29,6 +30,12 @@ class RandomChar extends Component {
         this.setState({ char, loading: false });
     };
 
+    onCharLoading = () => {
+        this.setState({
+            loading: true,
+        });
+    };
+
     onError = () => {
         this.setState({
             loading: false,
@@ -38,6 +45,8 @@ class RandomChar extends Component {
 
     updateChar = () => {
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); //range
+
+        this.onCharLoading();
         this.marvelService.getCharacter(id).then(this.onCharLoaded).catch(this.onError);
     };
 
@@ -65,7 +74,7 @@ class RandomChar extends Component {
                             try it
                         </div>
                     </button>
-                    <img src={mjolnir} alt="mjolnir" className="randomchar__decoration" />
+                    <img src={goblin} alt="mjolnir" className="randomchar__decoration" />
                 </div>
             </div>
         );

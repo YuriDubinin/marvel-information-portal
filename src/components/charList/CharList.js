@@ -12,11 +12,12 @@ class CharList extends Component {
         loading: true,
         error: false,
     };
+
     marvelService = new MarvelService();
 
     //lyfecucle hooks
     componentDidMount() {
-        this.updateChars();
+        this.marvelService.getAllCharacters().then(this.onCharsLoaded).catch(this.onError);
     }
 
     //methods
@@ -31,32 +32,41 @@ class CharList extends Component {
         });
     };
 
-    updateChars = () => {
-        this.marvelService.getAllCharacters().then(this.onCharsLoaded).catch(this.onError);
-    };
+    //method for optimization
+    renderItems(arr) {
+        const items = arr.map((item) => {
+            let imgStyle = { objectFit: "cover" };
 
-    render() {
-        const { chars, loading, error } = this.state;
+            if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
+                imgStyle = { objectFit: "unset" };
+            }
 
-        const errorMessage = error ? <ErrorMessage /> : null,
-            spinner = loading ? <Spinner /> : null;
-
-        const elements = chars.map((item) => {
             return (
                 <li className="char__item" key={item.id}>
-                    <img src={item.thumbnail} alt="abyss" />
+                    <img src={item.thumbnail} alt={item.name} style={imgStyle} />
                     <div className="char__name">{item.name}</div>
                 </li>
             );
         });
+        //centring spinner & error message
+        return <ul className="char__grid">{items}</ul>;
+    }
+
+    render() {
+        const { chars, loading, error } = this.state;
+
+        const items = this.renderItems(chars);
+
+        const errorMessage = error ? <ErrorMessage /> : null,
+            spinner = loading ? <Spinner /> : null,
+            content = !(loading || error) ? items : null;
 
         return (
             <div className="char__list">
-                <ul className="char__grid">
-                    {spinner}
-                    {errorMessage}
-                    {elements}
-                </ul>
+                {spinner}
+                {errorMessage}
+                {content}
+
                 <button className="button button__main button__long">
                     <div className="inner">load more</div>
                 </button>
