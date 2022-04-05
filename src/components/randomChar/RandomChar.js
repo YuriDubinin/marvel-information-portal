@@ -5,7 +5,6 @@ import Spinner from "../spinner/Spiner";
 import MarvelService from "../../services/MarvelService";
 
 import goblin from "../../resources/img/goblin.png";
-import mjolnir from "../../resources/img/mjolnir.png";
 
 import "./randomChar.scss";
 
