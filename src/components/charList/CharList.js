@@ -11,18 +11,43 @@ class CharList extends Component {
         chars: [],
         loading: true,
         error: false,
+        newItemLoading: false,
+        offset: 210,
+        charEnded: false,
     };
 
     marvelService = new MarvelService();
 
     //lyfecucle hooks
     componentDidMount() {
-        this.marvelService.getAllCharacters().then(this.onCharsLoaded).catch(this.onError);
+        this.onRequest();
     }
 
     //methods
-    onCharsLoaded = (chars) => {
-        this.setState({ chars, loading: false });
+    onRequest = (offset) => {
+        this.onCharListLoading();
+        this.marvelService.getAllCharacters(offset).then(this.onCharsLoaded).catch(this.onError);
+    };
+
+    onCharListLoading = () => {
+        this.setState({
+            newItemLoading: true,
+        });
+    };
+
+    onCharsLoaded = (newChars) => {
+        let ended = false;
+        if (newChars.length < 9) {
+            ended = true;
+        }
+
+        this.setState(({ offset, chars }) => ({
+            chars: [...chars, ...newChars],
+            loading: false,
+            newItemLoading: false,
+            offset: offset + 9,
+            charEnded: ended,
+        }));
     };
 
     onError = () => {
@@ -59,7 +84,7 @@ class CharList extends Component {
     }
 
     render() {
-        const { chars, loading, error } = this.state;
+        const { chars, loading, error, offset, newItemLoading, charEnded } = this.state;
 
         const items = this.renderItems(chars);
 
@@ -73,7 +98,12 @@ class CharList extends Component {
                 {errorMessage}
                 {content}
 
-                <button className="button button__main button__long">
+                <button
+                    className="button button__main button__long"
+                    disabled={newItemLoading}
+                    onClick={() => this.onRequest(offset)}
+                    style={{ display: charEnded ? "none" : "block" }}
+                >
                     <div className="inner">load more</div>
                 </button>
             </div>
