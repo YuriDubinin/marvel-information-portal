@@ -85,6 +85,7 @@ class CharList extends Component {
 
             return (
                 <li
+                    tabIndex={0}
                     className={classNames}
                     key={item.id}
                     onClick={() => {
