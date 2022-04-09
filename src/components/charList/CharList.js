@@ -15,6 +15,7 @@ class CharList extends Component {
         newItemLoading: false,
         offset: 210,
         charEnded: false,
+        selectedChar: null,
     };
 
     marvelService = new MarvelService();
@@ -26,11 +27,11 @@ class CharList extends Component {
 
     //methods
     onRequest = (offset) => {
-        this.onCharListLoading();
+        this.onCharsLoading();
         this.marvelService.getAllCharacters(offset).then(this.onCharsLoaded).catch(this.onError);
     };
 
-    onCharListLoading = () => {
+    onCharsLoading = () => {
         this.setState({
             newItemLoading: true,
         });
@@ -58,21 +59,36 @@ class CharList extends Component {
         });
     };
 
+    onCharSelected = (id) => {
+        this.props.onCharSelected(id);
+
+        this.setState({
+            selectedChar: id,
+        });
+    };
+
     //method for optimization
     renderItems(arr) {
         const items = arr.map((item) => {
-            let imgStyle = { objectFit: "cover" };
+            let imgStyle = { objectFit: "cover" },
+                classNames = `char__item`;
 
+            //choosing an image style for a placeholder image
             if (item.thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
                 imgStyle = { objectFit: "unset" };
             }
 
+            //choosing an class names for active card
+            if (item.id === this.state.selectedChar) {
+                classNames = `char__item char__item_selected`;
+            }
+
             return (
                 <li
-                    className="char__item"
+                    className={classNames}
                     key={item.id}
                     onClick={() => {
-                        this.props.onCharSelected(item.id);
+                        this.onCharSelected(item.id);
                     }}
                 >
                     <img src={item.thumbnail} alt={item.name} style={imgStyle} />

@@ -73,7 +73,7 @@ class RandomChar extends Component {
                             try it
                         </div>
                     </button>
-                    <img src={goblin} alt="mjolnir" className="randomchar__decoration" />
+                    <img src={goblin} alt="goblin" className="randomchar__decoration" />
                 </div>
             </div>
         );
