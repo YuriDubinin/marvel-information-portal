@@ -47,9 +47,9 @@ const CharList = (props) => {
         setLoading(false);
     };
 
+    //sets active card using refs
     const itemRefs = useRef([]);
 
-    //sets active card
     const focusOnItem = (id) => {
         itemRefs.current.forEach((item) => item.classList.remove("char__item_selected"));
         itemRefs.current[id].classList.add("char__item_selected");
@@ -94,6 +94,7 @@ const CharList = (props) => {
 
     const items = renderItems(chars);
 
+    //conditional rendering
     const errorMessage = error ? <ErrorMessage /> : null,
         spinner = loading ? <Spinner /> : null,
         content = !(loading || error) ? items : null;
