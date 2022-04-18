@@ -1,17 +1,16 @@
 import { useState, useEffect } from "react";
 
-import MarvelService from "../../services/MarvelService";
+import useMarvelService from "../../services/MarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
 import Spinner from "../spinner/Spiner";
-import goblin from "../../resources/img/goblin.png";
+
 import "./randomChar.scss";
+import goblin from "../../resources/img/goblin.png";
 
 const RandomChar = () => {
-    const [char, setChar] = useState({}),
-        [loading, setLoading] = useState(true),
-        [error, setError] = useState(false);
+    const [char, setChar] = useState({});
 
-    const marvelService = new MarvelService();
+    const { loading, error, getCharacter, clearError } = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -24,23 +23,13 @@ const RandomChar = () => {
 
     const onCharLoaded = (char) => {
         setChar(char);
-        setLoading(false);
-    };
-
-    const onCharLoading = () => {
-        setLoading(true);
-    };
-
-    const onError = () => {
-        setError(true);
-        setLoading(false);
     };
 
     const updateChar = () => {
+        clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); //range
 
-        onCharLoading();
-        marvelService.getCharacter(id).then(onCharLoaded).catch(onError);
+        getCharacter(id).then(onCharLoaded);
     };
 
     //conditional rendering
