@@ -10,15 +10,16 @@ const useMarvelService = () => {
 
     //takes 9 characters (limit=9)
     const getAllCharacters = async (offset = _baseOffset) => {
-        const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
+        const response = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
 
-        return res.data.results.map(_transformCharacter);
+        return response.data.results.map(_transformCharacter);
     };
 
+    //takes 1 character by id
     const getCharacter = async (id) => {
-        const res = await request(`${_apiBase}characters/${id}?${_apiKey}`);
+        const response = await request(`${_apiBase}characters/${id}?${_apiKey}`);
 
-        return _transformCharacter(res.data.results[0]);
+        return _transformCharacter(response.data.results[0]);
     };
 
     //transform the original object into the one that intresting us
@@ -36,7 +37,33 @@ const useMarvelService = () => {
         };
     };
 
-    return { loading, error, clearError, getAllCharacters, getCharacter };
+    //takes 1 comics by id
+    const getComics = async (id) => {
+        const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
+        return _transformComics(res.data.results[0]);
+    };
+
+    //takes 8 comics
+    const getAllComics = async () => {
+        const response = await request(`${_apiBase}comics?limit=8&${_apiKey}`);
+
+        return response.data.results.map(_transformComics);
+    };
+
+    //tranform the original object into the one that intresting us
+    const _transformComics = (comics) => {
+        return {
+            id: comics.id,
+            title: comics.title,
+            description: comics.description || "There is no description",
+            pageCount: comics.pageCount ? `${comics.pageCount} p.` : "No information about the number of pages",
+            thumbnail: comics.thumbnail.path + "." + comics.thumbnail.extension,
+            language: comics.textObjects.language || "en-us",
+            price: comics.prices.price ? `${comics.prices.price}$` : "not available",
+        };
+    };
+
+    return { loading, error, clearError, getAllCharacters, getCharacter, getComics, getAllComics };
 };
 
 export default useMarvelService;
