@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 import useMarvelService from "../../services/MarvelService";
 import ErrorMessage from "../errorMessage/ErrorMessage";
-import Spinner from "../spinner/Spiner";
+import Spinner from "../spinner/Spinner";
 
 import "./randomChar.scss";
 import goblin from "../../resources/img/goblin.png";
