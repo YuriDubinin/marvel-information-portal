@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
-import ErrorMessague from "../errorMessage/ErrorMessage";
+import ErrorMessage from "../errorMessage/ErrorMessage";
 
 import "./comicsList.scss";
 
@@ -56,7 +56,7 @@ const ComicsList = () => {
     const items = renderItems(comicsList);
 
     //conditional rendering
-    const errorMessage = error ? <ErrorMessague /> : null,
+    const errorMessage = error ? <ErrorMessage /> : null,
         spinner = loading && !newItemLoading ? <Spinner /> : null;
 
     return (
