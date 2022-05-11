@@ -11,7 +11,7 @@ import "./charSearchForm.scss";
 const CharSearchForm = () => {
     const [char, setChar] = useState(null);
 
-    const { error, clearError, getCharacterByName } = useMarvelService();
+    const { loading, error, clearError, getCharacterByName } = useMarvelService();
 
     const onCharLoaded = (char) => {
         setChar(char);
@@ -34,10 +34,8 @@ const CharSearchForm = () => {
         char.length > 0 ? (
             <div className="char__search-wrapper-feedback">
                 <div className="char__search-successful">There is! Visit {char[0].name} page?</div>
-                <Link to={`/chars/${char[0].id}`}>
-                    <button className="button button__main" type="submit">
-                        <div className="inner">to page</div>
-                    </button>
+                <Link to={`/characters/${char[0].id}`} className="button button__main" type="submit">
+                    <div className="inner">to page</div>
                 </Link>
             </div>
         ) : (
@@ -54,8 +52,8 @@ const CharSearchForm = () => {
                 validationSchema={Yup.object({
                     charName: Yup.string().required("This field is required").max(40, "It`s too long"),
                 })}
-                onSubmit={(values) => {
-                    updateChar(values.charName);
+                onSubmit={({ charName }) => {
+                    updateChar(charName);
                 }}
             >
                 <Form>
@@ -69,7 +67,7 @@ const CharSearchForm = () => {
                         type="text"
                         placeholder="Enter name"
                     />
-                    <button className="char__search-button button button__secondary" type="submit">
+                    <button className="char__search-button button button__secondary" type="submit" disabled={loading}>
                         <div className="inner">find</div>
                     </button>
                     <FormikErrorMessage className="char__search-error" name="charName" component="div" />

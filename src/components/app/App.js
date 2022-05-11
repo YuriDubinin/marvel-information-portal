@@ -27,7 +27,7 @@ const App = () => {
                                 element={<SinglePage Component={SingleComicPage} dataType="comic" />}
                             />
                             <Route
-                                path="/chars/:id"
+                                path="/characters/:id"
                                 element={<SinglePage Component={SingleCharPage} dataType="character" />}
                             />
                             <Route path="*" element={<Page404 />} />
