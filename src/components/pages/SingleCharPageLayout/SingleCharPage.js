@@ -1,5 +1,5 @@
 import "./singleCharPage.scss";
-import { Helmet } from "react-helmet";
+import { Helmet } from "react-helmet-async";
 
 const SingleCharPage = ({ data }) => {
     const { name, description, thumbnail } = data;
