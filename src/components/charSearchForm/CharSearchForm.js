@@ -26,19 +26,14 @@ const setContent = (process, char) => {
     switch (process) {
         case "waiting":
             return;
-            break;
         case "loading":
             return <div style={{ textAlign: "center", color: "green", marginTop: "15px" }}>Searching..</div>;
-            break;
         case "confirmed":
             return result;
-            break;
         case "error":
             return <ErrorMessage />;
-            break;
         default:
             throw new Error("Unexpected process state");
-            break;
     }
 };
 

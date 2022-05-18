@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
-import { CSSTransition, TransitionGroup } from "react-transition-group";
 
 import useMarvelService from "../../services/MarvelService";
 import Spinner from "../spinner/Spinner";
@@ -13,19 +12,14 @@ const setContent = (process, Component, newItemLoading) => {
     switch (process) {
         case "waiting":
             return <Spinner />;
-            break;
         case "loading":
             return newItemLoading ? <Component /> : <Spinner />;
-            break;
         case "confirmed":
             return <Component />;
-            break;
         case "error":
             return <ErrorMessage />;
-            break;
         default:
             throw new Error("Unexpected process state");
-            break;
     }
 };
 
@@ -39,6 +33,7 @@ const CharList = (props) => {
 
     useEffect(() => {
         onRequest(offset, true);
+        // eslint-disable-next-line
     }, []);
 
     const onRequest = (offset, initial) => {
@@ -80,40 +75,36 @@ const CharList = (props) => {
             }
 
             return (
-                <CSSTransition classNames="char__item" timeout={400} key={item.id}>
-                    <li
-                        className="char__item"
-                        tabIndex={0}
-                        ref={(el) => (itemRefs.current[i] = el)}
-                        onClick={() => {
+                <li
+                    key={i}
+                    className="char__item"
+                    tabIndex={0}
+                    ref={(el) => (itemRefs.current[i] = el)}
+                    onClick={() => {
+                        props.onCharSelected(item.id);
+                        focusOnItem(i);
+                    }}
+                    onKeyPress={(e) => {
+                        if (e.key === " " || e.key === "Enter") {
                             props.onCharSelected(item.id);
                             focusOnItem(i);
-                        }}
-                        onKeyPress={(e) => {
-                            if (e.key === " " || e.key === "Enter") {
-                                props.onCharSelected(item.id);
-                                focusOnItem(i);
-                            }
-                        }}
-                    >
-                        <img src={item.thumbnail} alt={item.name} style={imgStyle} />
-                        <div className="char__name">{item.name}</div>
-                    </li>
-                </CSSTransition>
+                        }
+                    }}
+                >
+                    <img src={item.thumbnail} alt={item.name} style={imgStyle} />
+                    <div className="char__name">{item.name}</div>
+                </li>
             );
         });
 
         //centring spinner & error message
-        return (
-            <ul className="char__grid">
-                <TransitionGroup component={null}>{items}</TransitionGroup>
-            </ul>
-        );
+        return <ul className="char__grid">{items}</ul>;
     }
 
     //re-rendering of the CharList component only happens when the 'process' state changes
     const elements = useMemo(() => {
         return setContent(process, () => renderItems(chars), newItemLoading);
+        // eslint-disable-next-line
     }, [process]);
 
     return (
