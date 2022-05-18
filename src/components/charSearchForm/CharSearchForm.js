@@ -8,28 +8,8 @@ import ErrorMessage from "../errorMessage/ErrorMessage";
 
 import "./charSearchForm.scss";
 
-const CharSearchForm = () => {
-    const [char, setChar] = useState(null);
-
-    const { loading, error, clearError, getCharacterByName } = useMarvelService();
-
-    const onCharLoaded = (char) => {
-        setChar(char);
-    };
-
-    const updateChar = (charName) => {
-        clearError();
-
-        if (!charName) {
-            return;
-        }
-
-        getCharacterByName(charName).then((char) => onCharLoaded(char));
-    };
-
-    //conditional render
-    const criticalError = error ? <ErrorMessage /> : null;
-
+//rendering the right parts of the interface depending on the process
+const setContent = (process, char) => {
     const result = char ? (
         char.length > 0 ? (
             <div className="char__search-wrapper-feedback">
@@ -42,6 +22,46 @@ const CharSearchForm = () => {
             <div className="char__search-error">The character was not found. Check the name and try again</div>
         )
     ) : null;
+
+    switch (process) {
+        case "waiting":
+            return;
+            break;
+        case "loading":
+            return <div style={{ textAlign: "center", color: "green", marginTop: "15px" }}>Searching..</div>;
+            break;
+        case "confirmed":
+            return result;
+            break;
+        case "error":
+            return <ErrorMessage />;
+            break;
+        default:
+            throw new Error("Unexpected process state");
+            break;
+    }
+};
+
+const CharSearchForm = () => {
+    const [char, setChar] = useState(null);
+
+    const { clearError, getCharacterByName, process, setProcess } = useMarvelService();
+
+    const onCharLoaded = (char) => {
+        setChar(char);
+    };
+
+    const updateChar = (charName) => {
+        clearError();
+
+        if (!charName) {
+            return;
+        }
+
+        getCharacterByName(charName)
+            .then((char) => onCharLoaded(char))
+            .then(() => setProcess("confirmed"));
+    };
 
     return (
         <div className="char__search-form">
@@ -67,15 +87,18 @@ const CharSearchForm = () => {
                         type="text"
                         placeholder="Enter name"
                     />
-                    <button className="char__search-button button button__secondary" type="submit" disabled={loading}>
+                    <button
+                        className="char__search-button button button__secondary"
+                        type="submit"
+                        disabled={process === "loading" ? true : false}
+                    >
                         <div className="inner">find</div>
                     </button>
                     <FormikErrorMessage className="char__search-error" name="charName" component="div" />
                 </Form>
             </Formik>
 
-            {result}
-            {criticalError}
+            {setContent(process, char)}
         </div>
     );
 };

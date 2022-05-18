@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 
 import useMarvelService from "../../services/MarvelService";
-import ErrorMessage from "../errorMessage/ErrorMessage";
-import Spinner from "../spinner/Spinner";
+import setContent from "../../utils/setContent";
 
 import "./randomChar.scss";
 import goblin from "../../resources/img/goblin.png";
@@ -10,7 +9,7 @@ import goblin from "../../resources/img/goblin.png";
 const RandomChar = () => {
     const [char, setChar] = useState({});
 
-    const { loading, error, getCharacter, clearError } = useMarvelService();
+    const { getCharacter, clearError, process, setProcess } = useMarvelService();
 
     useEffect(() => {
         updateChar();
@@ -29,19 +28,14 @@ const RandomChar = () => {
         clearError();
         const id = Math.floor(Math.random() * (1011400 - 1011000) + 1011000); //range
 
-        getCharacter(id).then(onCharLoaded);
+        getCharacter(id)
+            .then(onCharLoaded)
+            .then(() => setProcess("confirmed"));
     };
-
-    //conditional rendering
-    const errorMessage = error ? <ErrorMessage /> : null,
-        spinner = loading ? <Spinner /> : null,
-        content = !(loading || error) ? <View char={char} /> : null;
 
     return (
         <div className="randomchar">
-            {errorMessage}
-            {spinner}
-            {content}
+            {setContent(process, View, char)}
             <div className="randomchar__static">
                 <p className="randomchar__title">
                     Random character for today!
@@ -60,8 +54,8 @@ const RandomChar = () => {
     );
 };
 
-const View = ({ char }) => {
-    const { name, description, thumbnail, homepage, wiki } = char;
+const View = ({ data }) => {
+    const { name, description, thumbnail, homepage, wiki } = data;
 
     //to check the path to the placeholder image
     const notAvalibleImgAPath = "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg";
