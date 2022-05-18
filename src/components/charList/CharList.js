@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import PropTypes from "prop-types";
 import { CSSTransition, TransitionGroup } from "react-transition-group";
 
@@ -32,7 +32,7 @@ const setContent = (process, Component, newItemLoading) => {
 const CharList = (props) => {
     const [chars, setChars] = useState([]),
         [newItemLoading, setNewItemLoading] = useState(false),
-        [offset, setOffset] = useState(210),
+        [offset, setOffset] = useState(190),
         [charEnded, setCharEnded] = useState(false);
 
     const { getAllCharacters, process, setProcess } = useMarvelService();
@@ -111,10 +111,14 @@ const CharList = (props) => {
         );
     }
 
+    //re-rendering of the CharList component only happens when the 'process' state changes
+    const elements = useMemo(() => {
+        return setContent(process, () => renderItems(chars), newItemLoading);
+    }, [process]);
+
     return (
         <div className="char__list">
-            {setContent(process, () => renderItems(chars), newItemLoading)}
-
+            {elements}
             <button
                 className="button button__main button__long"
                 disabled={newItemLoading}
