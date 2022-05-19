@@ -4,9 +4,8 @@ import useMarvelService from "../../services/MarvelService";
 import setContent from "../../utils/setContent";
 
 import "./randomChar.scss";
-import goblin from "../../resources/img/goblin.png";
 
-const RandomChar = () => {
+const RandomChar = ({ viewRef }) => {
     const [char, setChar] = useState({});
 
     const { getCharacter, clearError, process, setProcess } = useMarvelService();
@@ -35,7 +34,7 @@ const RandomChar = () => {
     };
 
     return (
-        <div className="randomchar">
+        <div className="randomchar" ref={viewRef}>
             {setContent(process, View, char)}
             <div className="randomchar__static">
                 <p className="randomchar__title">
@@ -49,7 +48,6 @@ const RandomChar = () => {
                         try it
                     </div>
                 </button>
-                <img src={goblin} alt="goblin" className="randomchar__decoration" />
             </div>
         </div>
     );

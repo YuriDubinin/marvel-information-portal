@@ -7,7 +7,7 @@ import Spinner from "../spinner/Spinner";
 
 //dynamic imports
 const Page404 = lazy(() => import("../pages/404")),
-    MainPage = lazy(() => import("../pages/MainPage")),
+    MainPage = lazy(() => import("../pages/MainPage/MainPage")),
     ComicsPage = lazy(() => import("../pages/ComicsPage")),
     SingleComicPage = lazy(() => import("../pages/SingleComicPageLayout/SingleComicPage")),
     SingleCharPage = lazy(() => import("../pages/SingleCharPageLayout/SingleCharPage")),

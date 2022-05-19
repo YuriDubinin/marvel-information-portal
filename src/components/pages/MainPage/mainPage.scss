@@ -1,0 +1,20 @@
+@import "../../../style/animation.scss";
+
+.main-page {
+    position: relative;
+}
+.hob-goblin-right-side {
+    position: absolute;
+    bottom: 14px;
+    right: -37px;
+    opacity: 0;
+    animation: goblin-appearance-right-side 2.5s forwards, goblin-flying-right-side 7s 2.5s linear infinite;
+}
+.hob-goblin-left-side {
+    position: absolute;
+    bottom: 10%;
+    left: -19%;
+    opacity: 0;
+    transform: rotateY(180deg);
+    animation: goblin-appearance-left-side 2.5s forwards, goblin-flying-left-side 7s 2.5s linear infinite;
+}
